@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'home_page.dart';
@@ -53,7 +54,9 @@ class _MainPageState extends State<MainPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          print('Clicked');
+          if (kDebugMode) {
+            print('Clicked');
+          }
         },
         child: const Icon(Icons.add),
       ),

@@ -1,8 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'home_page.dart';
 import 'inbox_page.dart';
+import 'create_article.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -54,9 +54,12 @@ class _MainPageState extends State<MainPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          if (kDebugMode) {
-            print('Clicked');
-          }
+          Navigator.push<void>(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const CreateArticle(),
+            ),
+          );
         },
         child: const Icon(Icons.add),
       ),

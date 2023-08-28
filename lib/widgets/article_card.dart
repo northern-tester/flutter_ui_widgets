@@ -11,24 +11,68 @@ class ArticleCard extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.all(16),
       elevation: 4,
-      child: Column(
-        children: [
-          CardBanner(
-            imageUrl: article.urlToImage,
-          ),
-          CardDetail(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isTablet = constraints.maxWidth > 600;
+          return isTablet
+              ? WideCard(article: article)
+              : TallCard(article: article);
+        },
+      ),
+    );
+  }
+}
+
+class TallCard extends StatelessWidget {
+  const TallCard({
+    Key? key,
+    required this.article,
+  }) : super(key: key);
+
+  final Article article;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        CardBanner(imageUrl: article.urlToImage),
+        CardDetail(article: article),
+      ],
+    );
+  }
+}
+
+class WideCard extends StatelessWidget {
+  const WideCard({
+    Key? key,
+    required this.article,
+  }) : super(key: key);
+
+  final Article article;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        CardBanner(
+          imageUrl: article.urlToImage,
+          isWideCard: true,
+        ),
+        Expanded(
+          child: CardDetail(
             article: article,
           ),
-        ],
-      ),
+        )
+      ],
     );
   }
 }
 
 class CardBanner extends StatelessWidget {
   final String? imageUrl;
+  final bool isWideCard;
 
-  const CardBanner({super.key, this.imageUrl});
+  const CardBanner({super.key, this.imageUrl, this.isWideCard = false});
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +84,8 @@ class CardBanner extends StatelessWidget {
             topRight: Radius.circular(4),
           ),
           child: SizedBox(
-            height: 200,
-            width: double.infinity,
+            height: isWideCard ? 150 : 200,
+            width: isWideCard ? 150 : double.infinity,
             child: Image.network(
               imageUrl!,
               fit: BoxFit.cover,
@@ -55,8 +99,8 @@ class CardBanner extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: 10,
-          right: 10,
+          top: isWideCard ? 2 : 10,
+          right: isWideCard ? 2 : 10,
           child: IconButton(
             onPressed: () {},
             icon: const Icon(Icons.bookmark_border, size: 32),
@@ -74,22 +118,19 @@ class CardDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
+    return Container(
+      height: isPortrait ? 130 : 150,
       padding: const EdgeInsets.all(16),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
             article!.title,
-            style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                  fontStyle: FontStyle.italic,
-                  color: Colors.grey[600],
-                ),
+            style: Theme.of(context).textTheme.headlineSmall,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-          ),
-          const SizedBox(
-            height: 16,
           ),
           Row(
             children: <Widget>[

@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ui_widgets/models/article.dart';
+import 'package:flutter_ui_widgets/widgets/platform_spinner.dart';
 
 class ArticleCard extends StatelessWidget {
   final Article article;
@@ -8,6 +10,19 @@ class ArticleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+    if (isIOS) {
+      return Container(
+        margin: const EdgeInsets.all(16),
+        padding: const EdgeInsets.only(bottom: 8),
+        decoration: const BoxDecoration(
+          border: Border(
+            bottom: BorderSide(width: 1, color: CupertinoColors.systemGrey4),
+          ),
+        ),
+        child: WideCard(article: article),
+      );
+    }
     return Card(
       margin: const EdgeInsets.all(16),
       elevation: 4,
@@ -92,7 +107,7 @@ class CardBanner extends StatelessWidget {
               loadingBuilder: (context, child, loadingProgress) {
                 if (loadingProgress == null) return child;
                 return const Center(
-                  child: CircularProgressIndicator(),
+                  child: PlatformSpinner(),
                 );
               },
             ),
@@ -134,8 +149,12 @@ class CardDetail extends StatelessWidget {
           ),
           Row(
             children: <Widget>[
-              Text(article!.source),
-              const Spacer(),
+              Flexible(
+                child: Text(
+                  article!.source,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
               const Text('45 Comments'),
             ],
           )

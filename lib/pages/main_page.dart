@@ -1,67 +1,43 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'home_page.dart';
 import 'inbox_page.dart';
-import 'create_article.dart';
 
-class MainPage extends StatefulWidget {
-  const MainPage({super.key});
-
-  @override
-  State<MainPage> createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage> {
-  final List<Widget> _pages = [
-    const HomePage(),
-    const InboxPage(),
-  ];
-
-  int _selectedIndex = 0;
-
-  void _onTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+class MainPage extends StatelessWidget {
+  const MainPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Image.asset(
-          'assets/images/logo.png',
-          width: 180,
-        ),
-      ),
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: [..._pages],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onTapped,
-        items: const [
-          BottomNavigationBarItem(
-            label: 'Home',
-            icon: Icon(Icons.home),
-          ),
-          BottomNavigationBarItem(
-            label: 'Inbox',
-            icon: Icon(Icons.mail),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push<void>(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const CreateArticle(),
+    return Material(
+      child: CupertinoTabScaffold(
+        tabBar: CupertinoTabBar(
+          backgroundColor: CupertinoColors.systemGrey5,
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              label: 'Home',
+              icon: Icon(CupertinoIcons.home),
             ),
-          );
+            BottomNavigationBarItem(
+              label: 'Inbox',
+              icon: Icon(CupertinoIcons.mail),
+            ),
+          ],
+        ),
+        tabBuilder: (context, index) {
+          switch (index) {
+            case 0:
+              return CupertinoTabView(builder: (context) {
+                return const HomePage();
+              });
+            case 1:
+              return CupertinoTabView(builder: (context) {
+                return const InboxPage();
+              });
+            default:
+              return Container();
+          }
         },
-        child: const Icon(Icons.add),
       ),
     );
   }

@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter UI Widgets',
       theme: lightTheme.copyWith(
+        platform: TargetPlatform.iOS,
         colorScheme: lightTheme.colorScheme.copyWith(
           primary: Colors.red,
           secondary: Colors.green,
